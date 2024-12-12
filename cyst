@@ -1,0 +1,26 @@
+#!/bin/bash
+
+# VARS
+CURRENT_PKG_LIST=./packages
+HELPER="$CYST_HELPER"
+
+# we coding wit dis one!!11!
+if [ "$HELPER" = "yay" ]; then
+    yay -S "$(cat $CURRENT_PKG_LIST | fzf --layout reverse --preview="bash -c 'source ./prevcyst; prevcyst {}'")"
+elif [ "$HELPER" = "paru" ]; then
+    paru -S "$(cat $CURRENT_PKG_LIST | fzf --layout reverse --preview="bash -c 'source ./prevcyst; prevcyst {}'")"
+elif [ "$HELPER" = "no" ]; then
+    if [ "$(command -v git)" != "" ]; then
+        echo "Installing an AUR Helper for you.."
+        git clone https://github.com/Jguer/yay
+        cd yay || exit
+        makepkg -si
+        echo "Now run cyst again"
+        exit
+    else
+        echo "Please install git for me to able to install an AUR Helper for you."
+    fi
+else
+    echo "Invalid CYST_HELPER environment variable, exiting.."
+    exit
+fi

@@ -1,0 +1,14 @@
+function prevcyst() {
+    local pk="$1"
+
+    # general info logic (i hate grep)
+    yay -Si "$pk" | grep -E '^(Name|Description|Maintainer|Version|Out-of-date) *:' | \
+    sed 's/ *: */: /g' | fold -s -w 80
+
+    # is the package installed?
+    if yay -Q "$pk" &>/dev/null; then
+        echo -e "\nInstalled"
+    else
+        echo -e "\nNot Installed"
+    fi
+}
